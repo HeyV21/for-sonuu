@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Sonuu ❤️</title>
+    <style>
+        :root {
+            --bg-color: #fff0f5; 
+            --primary-pink: #ff69b4;
+            --text-color: #4a4a4a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #container {
+            width: 90%;
+            max-width: 400px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+            z-index: 10;
+        }
+
+        .gif-container img {
+            width: 160px;
+            height: 160px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            margin-bottom: 10px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        p {
+            font-size: 16px;
+            color: var(--text-color);
+            margin-bottom: 30px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            /* Important: Keep this relative so buttons stay in line initially */
+            position: relative; 
+            min-height: 50px; 
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s;
+        }
+
+        #yesBtn {
+            background-color: var(--primary-pink);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+            z-index: 11;
+        }
+
+        #noBtn {
+            background-color: #e0e0e0;
+            color: #666;
+            z-index: 12;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .heart {
+            position: fixed;
+            bottom: -50px;
+            font-size: 24px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp 4s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div class="gif-container" id="gifBox">
+            <img src="https://media.tenor.com/p_VEcmrBsLMAAAAi/manja.gif" alt="sticker">
+        </div>
+        
+        <h1 id="mainQuestion">Hey Sonuu 🤗<br>Do you love me?</h1>
+        <p id="subText"></p>
+        
+        <div class="btn-group">
+            <button id="yesBtn">Yes</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        const mainQuestion = document.getElementById('mainQuestion');
+        const subText = document.getElementById('subText');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const gifBox = document.getElementById('gifBox');
+
+        let clickCount = 0;
+
+        const scenarios = [
+            {
+                gif: "https://media.tenor.com/RowKT44Zuf0AAAAm/ngoclan.webp",
+                q: "Aavu na hoy...🙄",
+                sub: "Itni jaldi na matt bolo 😕"
+            },
+            {
+                gif: "https://media.tenor.com/tzvzrz4famQAAAAm/couple-forgive-me.webp",
+                q: "Ek aur baar Soch lo",
+                sub: "Aam km kre Sonuu mani jane"
+            },
+            {
+                gif: "https://media.tenor.com/3bDvSVpiwjoAAAAm/peach-goma-phone.webp",
+                q: "Aey Sonuu Aam nai kar ne mani ja have..",
+                sub: "Love kre ne? 🥺"
+            }
+        ];
+
+        noBtn.addEventListener('click', () => {
+            if (clickCount < 3) {
+                const data = scenarios[clickCount];
+                mainQuestion.innerText = data.q;
+                subText.innerText = data.sub;
+                gifBox.innerHTML = `<img src="${data.gif}" alt="sticker">`;
+                clickCount++;
+            }
+        });
+
+        // This handles the "No" button movement
+        function moveButton() {
+            if (clickCount >= 3) {
+                // Calculate random position
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+                
+                // Change to fixed ONLY when it starts moving so it doesn't mess up layout early
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = x + 'px';
+                noBtn.style.top = y + 'px';
+            }
+        }
+
+        // Triggers the move on hover (PC) or touch start (Mobile)
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Stop the click from happening
+            moveButton();
+        });
+
+        yesBtn.addEventListener('click', () => {
+            // Remove the No button entirely when she says Yes
+            noBtn.style.display = 'none';
+            
+            document.getElementById('container').innerHTML = `
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ4bm9oZzR4eXp5bm9oZzR4eXp5bm9oZzR4eXp5bm9oZzR4JnB0X2luc2lkZT10cnVlJmNjPTE/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="celebrate">
+                </div>
+                <h1>I knew it! You Love me a lot..!! 😅❤️</h1>
+            `;
+            
+            setInterval(createHeart, 150);
+        });
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+    </script>
+</body>
+</html>
