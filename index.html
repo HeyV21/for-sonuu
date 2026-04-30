@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Sonuu ❤️</title>
     <style>
         :root {
-            --bg-color: #fff0f5; 
+            --bg-color: #fff0f5;
             --primary-pink: #ff69b4;
             --text-color: #4a4a4a;
         }
@@ -30,7 +31,7 @@
             padding: 30px 20px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             transition: all 0.5s ease;
             z-index: 10;
         }
@@ -62,8 +63,8 @@
             justify-content: center;
             gap: 20px;
             /* Important: Keep this relative so buttons stay in line initially */
-            position: relative; 
-            min-height: 50px; 
+            position: relative;
+            min-height: 50px;
         }
 
         button {
@@ -91,8 +92,15 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .heart {
@@ -106,21 +114,29 @@
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div id="container">
         <div class="gif-container" id="gifBox">
             <img src="https://media.tenor.com/p_VEcmrBsLMAAAAi/manja.gif" alt="sticker">
         </div>
-        
+
         <h1 id="mainQuestion">Hey Sonuu 🤗<br>Do you love me?</h1>
         <p id="subText"></p>
-        
+
         <div class="btn-group">
             <button id="yesBtn">Yes</button>
             <button id="noBtn">No</button>
@@ -154,6 +170,7 @@
             }
         ];
 
+        // 1. Unified Click Handler for the scenarios
         noBtn.addEventListener('click', () => {
             if (clickCount < 3) {
                 const data = scenarios[clickCount];
@@ -164,38 +181,37 @@
             }
         });
 
-        // This handles the "No" button movement
-        function moveButton() {
+        // 2. Movement Logic (The "Running Away" part)
+        function moveButton(e) {
             if (clickCount >= 3) {
-                // Calculate random position
+                // For mobile: prevent zooming/scrolling while trying to tap "No"
+                if (e.type === 'touchstart') e.preventDefault();
+
                 const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
                 const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-                
-                // Change to fixed ONLY when it starts moving so it doesn't mess up layout early
+
                 noBtn.style.position = 'fixed';
                 noBtn.style.left = x + 'px';
                 noBtn.style.top = y + 'px';
             }
         }
 
-        // Triggers the move on hover (PC) or touch start (Mobile)
+        // Trigger movement on hover (PC) and touch (Mobile)
         noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Stop the click from happening
-            moveButton();
-        });
+        noBtn.addEventListener('touchstart', moveButton, { passive: false });
+
 
         yesBtn.addEventListener('click', () => {
             // Remove the No button entirely when she says Yes
             noBtn.style.display = 'none';
-            
+
             document.getElementById('container').innerHTML = `
                 <div class="gif-container">
                     <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ4bm9oZzR4eXp5bm9oZzR4eXp5bm9oZzR4eXp5bm9oZzR4JnB0X2luc2lkZT10cnVlJmNjPTE/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="celebrate">
                 </div>
                 <h1>I knew it! You Love me a lot..!! 😅❤️</h1>
             `;
-            
+
             setInterval(createHeart, 150);
         });
 
@@ -212,4 +228,5 @@
         }
     </script>
 </body>
+
 </html>
